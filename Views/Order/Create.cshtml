@@ -1,0 +1,27 @@
+@model dynamic
+@{
+    var product = ViewBag.Product as ECommerceApp.Models.Product;
+}
+
+<h2>Order Product</h2>
+@if (product != null)
+{
+    <div>
+        <h4>@product.Name</h4>
+        <p>Price: @product.Price?.ToString("C")</p>
+        <p>Available Stock: @product.Stock</p>
+    </div>
+    <form asp-action="Create" method="post">
+        <input type="hidden" name="productId" value="@product.Id" />
+        <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" name="quantity" min="1" max="@product.Stock" value="1" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Place Order</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+}
+else
+{
+    <div class="alert alert-danger">Product not found or out of stock.</div>
+}

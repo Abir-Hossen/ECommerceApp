@@ -1,0 +1,44 @@
+@model IEnumerable<ECommerceApp.Models.Product>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ECommerceApp.Models.ApplicationUser> SignInManager
+@inject UserManager<ECommerceApp.Models.ApplicationUser> UserManager
+
+<h2>Products</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.Name</td>
+        <td>@item.Price?.ToString("C")</td>
+        <td>@item.Stock</td>
+        <td>
+            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+            {
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+            }
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Customer") && item.Stock > 0)
+            {
+                <a asp-controller="Order" asp-action="Create" asp-route-productId="@item.Id" class="btn btn-success btn-sm">Order</a>
+            }
+        </td>
+    </tr>
+}
+    </tbody>
+</table>
+
+@if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+{
+    <a asp-action="Create" class="btn btn-primary">Add New Product</a>
+}

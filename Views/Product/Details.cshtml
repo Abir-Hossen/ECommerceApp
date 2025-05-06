@@ -1,0 +1,28 @@
+@model ECommerceApp.Models.Product
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ECommerceApp.Models.ApplicationUser> SignInManager
+@inject UserManager<ECommerceApp.Models.ApplicationUser> UserManager
+
+<h2>Product Details</h2>
+<div>
+    <h4>@Model.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Price</dt>
+        <dd class="col-sm-10">@Model.Price?.ToString("C")</dd>
+        <dt class="col-sm-2">Stock</dt>
+        <dd class="col-sm-10">@Model.Stock</dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+    }
+    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Customer") && Model.Stock > 0)
+    {
+        <a asp-controller="Order" asp-action="Create" asp-route-productId="@Model.Id" class="btn btn-success">Order this Product</a>
+    }
+</div>

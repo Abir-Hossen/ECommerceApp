@@ -1,0 +1,31 @@
+@model IEnumerable<ECommerceApp.Models.Order>
+
+<h2>My Orders</h2>
+@if (!Model.Any())
+{
+    <div class="alert alert-info">You have not placed any orders yet.</div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Order Date</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+@foreach (var order in Model)
+{
+    <tr>
+        <td>@order.Product?.Name</td>
+        <td>@order.Quantity</td>
+        <td>@order.OrderDate.ToString("g")</td>
+        <td>@(order.Product?.Price != null ? (order.Product.Price.GetValueOrDefault() * order.Quantity).ToString("C") : "-")</td>
+    </tr>
+}
+        </tbody>
+    </table>
+}
