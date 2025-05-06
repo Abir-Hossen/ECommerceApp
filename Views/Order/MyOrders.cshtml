@@ -14,6 +14,7 @@ else
                 <th>Quantity</th>
                 <th>Order Date</th>
                 <th>Price</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +25,9 @@ else
         <td>@order.Quantity</td>
         <td>@order.OrderDate.ToString("g")</td>
         <td>@(order.Product?.Price != null ? (order.Product.Price.GetValueOrDefault() * order.Quantity).ToString("C") : "-")</td>
+        <td>
+            <a asp-action="Delete" asp-route-id="@order.Id" class="btn btn-danger btn-sm">Delete</a>
+        </td>
     </tr>
 }
         </tbody>

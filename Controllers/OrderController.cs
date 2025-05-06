@@ -79,5 +79,36 @@ namespace ECommerceApp.Controllers
                 .ToListAsync();
             return View(orders);
         }
+
+        // Delete order (GET)
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+            var userName = User?.Identity?.Name;
+            var userId = userName != null ? _context.Users.FirstOrDefault(u => u.UserName == userName)?.Id : null;
+            var order = await _context.Orders.Include(o => o.Product).FirstOrDefaultAsync(o => o.Id == id && o.UserId == userId);
+            if (order == null) return NotFound();
+            return View(order);
+        }
+
+        // Delete order (POST)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var userName = User?.Identity?.Name;
+            var userId = userName != null ? _context.Users.FirstOrDefault(u => u.UserName == userName)?.Id : null;
+            var order = await _context.Orders.Include(o => o.Product).FirstOrDefaultAsync(o => o.Id == id && o.UserId == userId);
+            if (order == null) return NotFound();
+            // Add quantity back to product stock
+            if (order.Product != null)
+            {
+                order.Product.Stock += order.Quantity;
+                _context.Products.Update(order.Product);
+            }
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("MyOrders");
+        }
     }
 }

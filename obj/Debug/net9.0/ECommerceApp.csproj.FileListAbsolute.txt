@@ -442,3 +442,4 @@ D:\Project\ECommerceApp\obj\Debug\net9.0\refint\ECommerceApp.dll
 D:\Project\ECommerceApp\obj\Debug\net9.0\ECommerceApp.pdb
 D:\Project\ECommerceApp\obj\Debug\net9.0\ECommerceApp.genruntimeconfig.cache
 D:\Project\ECommerceApp\obj\Debug\net9.0\ref\ECommerceApp.dll
+D:\Project\ECommerceApp\obj\Debug\net9.0\ECommerceApp.sourcelink.json
